@@ -3,23 +3,14 @@ import json
 import simpleobsws
 import aiohttp
 from aiohttp import web
-from configparser import ConfigParser
 
-config = ConfigParser()
-config.read('config.ini')
-httpAddress = config.get('http', 'bind_to_address')
-httpPort = config.getint('http', 'bind_to_port')
-httpAuthKey = config.get('http', 'authentication_key')
-if httpAuthKey == '':
-    print('Starting HTTP server without authentication.')
-    httpAuthKey = None
-else:
-    print('Starting HTTP server with AuthKey set to "{}"'.format(httpAuthKey))
-wsAddress = config.get('obsws', 'ws_address')
-wsPort = config.getint('obsws', 'ws_port')
-wsPassword = config.get('obsws', 'ws_password')
+httpAddress = '0.0.0.0'
+httpPort = 4445
+httpAuthKey = None
+wsAddress = '127.0.0.1'
+wsPort = 4444
 loop = asyncio.get_event_loop()
-ws = simpleobsws.obsws(host=wsAddress, port=wsPort, password=wsPassword, loop=loop)
+ws = simpleobsws.obsws(host=wsAddress, port=wsPort, loop=loop)
 
 def statusmessage(message):
     print(str(message) + '...      ', end='', flush=True)
